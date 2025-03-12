@@ -1,3 +1,4 @@
+import sys
 import torch
 from transformers import AutoTokenizer, AutoModel
 import numpy as np
@@ -14,13 +15,18 @@ model = AutoModel.from_pretrained(model_name)
 # Example text
 text = "This is an example sentence."
 
+prompt_template = "Q: when account identity is {}, educational is {}, incoming is {}, credit is {}, shall we approve the credit card application? A: {}"
+text = prompt_template.format("1001", "High School", "1000000", "600", "Y")
+
 # Tokenize the text
 inputs = tokenizer(text, return_tensors="pt")  # pt for PyTorch tensors
 
 print(inputs)
 
 for id in inputs['input_ids'][0]:
-    print(tokenizer.decode(id))
+    print(f"id: {id}, token: {tokenizer.decode(id)}")
+
+sys.exit(0)
 
 # Calculate the cosine similarity between the first two token embeddings
 with torch.no_grad():
