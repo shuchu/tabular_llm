@@ -21,18 +21,14 @@ text = prompt_template.format("1001", "High School", "1000000", "600", "Y")
 # Tokenize the text
 inputs = tokenizer(text, return_tensors="pt")  # pt for PyTorch tensors
 
-print(inputs)
-
-for id in inputs['input_ids'][0]:
-    print(f"id: {id}, token: {tokenizer.decode(id)}")
-
-sys.exit(0)
-
 # Calculate the cosine similarity between the first two token embeddings
 with torch.no_grad():
     outputs = model(**inputs)
     token_embeddings = outputs.last_hidden_state
     print(token_embeddings.shape)
+    token_embeddings_mean = token_embeddings.mean(dim=1)
+    print(token_embeddings_mean.shape)
+
     first_token_embedding = token_embeddings[0][0]
     second_token_embedding = token_embeddings[0][1]
 
